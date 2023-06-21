@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>Mobile App</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="css/bootstrap.min.css">
+   <link href="css/navbar-fixed-top.css" rel="stylesheet">
+</head>
+<body>
+   <div class="container">
+      <nav class="navbar navbar-default navbar-fixed-top">
+         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CSM3103 <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+               <li><a href="#">Profile</a></li>
+               <li><a href="#">Logout</a></li>
+            </ul>
+         </div>
+         <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+   
+            </ul>
+         </div>
+      </nav>
+
+
+
+      <div id="staff-list" class="list-group"></div>
+
+      <nav class="navbar navbar-default navbar-fixed-bottom">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  Front End Programming &nbsp;2022
+               </div>
+            </div>
+         </div>
+      </nav>
+   </div>
+
+
+
+   <script src="js/jquery-3.2.1.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script>
+      $(document).ready(function() {
+         $.ajax({
+            url: "https://kerbau.odaje.biz/getstaff.php",
+            dataType: "json",
+            success: function(data) {
+               var staffListContainer = $("#staff-list");
+
+               data.forEach(function(staff) {
+                  var staffData = JSON.parse(staff);
+
+                  var listItem = $("<a></a>")
+                     .addClass("list-group-item")
+                     .attr("href", "secondpage.html?id=" + staffData.employeeNumber)
+                     .text(staffData.email);
+
+                  staffListContainer.append(listItem);
+               });
+            }
+         });
+      });
+   </script>
+</body>
+</html>
+
+
+
+
+
+

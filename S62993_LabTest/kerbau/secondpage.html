@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>Mobile App - Staff Details</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="css/bootstrap.min.css">
+   <link href="css/navbar-fixed-top.css" rel="stylesheet">
+</head>
+<body>
+   <div class="container">
+      <nav class="navbar navbar-default navbar-fixed-top">
+         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">CSM3103 <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+               <li><a href="#">Profile</a></li>
+               <li><a href="#">Logout</a></li>
+            </ul>
+         </div>
+         <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+            </ul>
+         </div>
+      </nav>
+
+      <nav class="navbar navbar-default navbar-fixed-bottom">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  Front End Programming &nbsp;2022
+               </div>
+            </div>
+         </div>
+      </nav>
+
+      <div id="staff-details" class="panel panel-default">
+         <div class="panel-heading">
+            <h3 class="panel-title">Staff Details</h3>
+         </div>
+         <div class="panel-body">
+            <ul class="list-group" id="details-list"></ul>
+         </div>
+      </div>
+   </div>
+
+   <script src="js/jquery-3.2.1.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script>
+      $(document).ready(function() {
+         var urlParams = new URLSearchParams(window.location.search);
+         var employeeNumber = urlParams.get("id");
+
+         $.ajax({
+            url: "https://kerbau.odaje.biz/getstaffbyid.php?id=" + employeeNumber,
+            dataType: "json",
+            success: function(data) {
+               var staffDetailsContainer = $("#details-list");
+
+               if (data[0] === "{\"status\":1}") {
+                  var staffData = JSON.parse(data[1]);
+
+                  var detailsItems = [
+                     { label: "Employee Number", value: staffData.employeeNumber },
+                     { label: "Last Name", value: staffData.lastName },
+                     { label: "First Name", value: staffData.firstName },
+                     { label: "Extension", value: staffData.extension },
+                     { label: "Email", value: staffData.email },
+                     { label: "Office Code", value: staffData.officeCode },
+                     { label: "Reports To", value: staffData.reportsTo },
+                     { label: "Job Title", value: staffData.jobTitle }
+                  ];
+
+                  detailsItems.forEach(function(item) {
+                     var listItem = $("<li></li>")
+                        .addClass("list-group-item")
+                        .html("<strong>" + item.label + ": </strong>" + item.value);
+
+                     staffDetailsContainer.append(listItem);
+                  });
+               } else {
+                  var message = $("<li></li>")
+                     .addClass("list-group-item")
+                     .text("No staff data found for the employee number.");
+
+                  staffDetailsContainer.append(message);
+               }
+            }
+         });
+      });
+   </script>
+</body>
+</html>
+
